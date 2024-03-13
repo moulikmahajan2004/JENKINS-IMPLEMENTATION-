@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    environment {
+        DIRECTORY_PATH = '/Users/hp/Desktop/Test'
+        TESTING_ENVIRONMENT = 'HTML TESTING ENVIRONMENT'
+        PRODUCTION_ENVIRONMENT = 'MOULIK MAHAJAN'
+    }
+    stages {
+        stage('build') {
+            steps {
+                echo "fetch the source code from the directory path: ${DIRECTORY_PATH}"
+                echo "compile the code and generate any necessary artifacts"
+            }
+        }
+        stage('test') {
+            steps {
+                echo "unit tests"
+                echo "integration tests"
+            }
+        }
+        stage('codequalitycheck') {
+            steps {
+                echo "check the quality of the code"
+            }
+        }
+        stage('deploy') {
+            steps {
+                echo "deploy the application to a testing environment: ${TESTING_ENVIRONMENT}"
+            }
+        }
+        stage('Approval') {
+            steps {
+                echo "waiting for the manual approval"
+                sleep 10
+                echo "Approval received and confirmed, continuing deployment..."
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploy the application to a production environment specified by the environment variable: ${PRODUCTION_ENVIRONMENT}"
+            }
+        }
+    }
+}
+
