@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./home";
+import Signup from "./signup";
+import Login from "./login";
+import { auth } from "./firebase";
+import Main from "./mainpage";
+import Stripes from "./stripe";
+import "./App.css";
+import Post from "./Main";
+import Find from "./Findque";
 function App() {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserName(user.displayName); // Corrected function name
+      } else {
+        setUserName("");
+      }
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <Routes>
+          {/* Pass the userName as a prop to the Home component */}
+          <Route path="/" element={<Home name={userName} />} />
+          <Route path="/sign" element={<Signup />} />
+          <Route path="/log" element={<Login />} />
+          <Route path="/main" element={<Main />} />
+          <Route path="/stripe" element={<Stripes />} />
+          <Route path="/post" element={<Post />} />
+          <Route path="/FindQue" element={<Find/>} />
+        </Routes>
+      </Router>
     </div>
   );
 }
